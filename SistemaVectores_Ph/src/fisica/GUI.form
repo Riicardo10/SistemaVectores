@@ -71,12 +71,12 @@
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="txtDireccion" min="-2" pref="138" max="-2" attributes="0"/>
+                                          <Component id="txtDireccionInput" min="-2" pref="138" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                          <Component id="txtMagnitud" min="-2" pref="138" max="-2" attributes="0"/>
+                                          <Component id="txtMagnitudInput" min="-2" pref="138" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -149,12 +149,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtMagnitud" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtMagnitudInput" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtDireccion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtDireccionInput" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="bttAceptar" min="-2" max="-2" attributes="0"/>
@@ -198,14 +198,20 @@
             <Property name="text" type="java.lang.String" value="Magnitud de vector:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtMagnitud">
+        <Component class="javax.swing.JTextField" name="txtMagnitudInput">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtMagnitudInputKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Direccion:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtDireccion">
+        <Component class="javax.swing.JTextField" name="txtDireccionInput">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDireccionInputKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="bttAceptar">
           <Properties>

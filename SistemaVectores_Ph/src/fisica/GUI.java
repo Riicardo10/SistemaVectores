@@ -2,11 +2,10 @@ package fisica;
 import java.text.DecimalFormat;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 public class GUI extends javax.swing.JFrame {
-    String magn, direc;
-    double d;
     Lista listaVectores = new Lista();
     DefaultTableModel md;
     String data[][] = {};
@@ -21,11 +20,12 @@ public class GUI extends javax.swing.JFrame {
         }
     }
     public void borrarCampos(){
-        txtMagnitud.setText(null);
-        txtDireccion.setText(null);
+        txtMagnitudInput.setText(null);
+        txtDireccionInput.setText(null);
     }
     public GUI() {
         initComponents();
+        setLocationRelativeTo(null);
         md = new DefaultTableModel(data, cabeza);
         jTblDatos.setModel(md);
     }
@@ -41,9 +41,9 @@ public class GUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtMagnitud = new javax.swing.JTextField();
+        txtMagnitudInput = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        txtDireccion = new javax.swing.JTextField();
+        txtDireccionInput = new javax.swing.JTextField();
         bttAceptar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTblDatos = new javax.swing.JTable();
@@ -68,7 +68,19 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel1.setText("Magnitud de vector:");
 
+        txtMagnitudInput.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMagnitudInputKeyPressed(evt);
+            }
+        });
+
         jLabel2.setText("Direccion:");
+
+        txtDireccionInput.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDireccionInputKeyPressed(evt);
+            }
+        });
 
         bttAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/ok.gif"))); // NOI18N
         bttAceptar.setText("Aceptar");
@@ -136,11 +148,11 @@ public class GUI extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtDireccionInput, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel1)
                                         .addGap(26, 26, 26)
-                                        .addComponent(txtMagnitud, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(txtMagnitudInput, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -190,11 +202,11 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtMagnitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMagnitudInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDireccionInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(bttAceptar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
@@ -244,35 +256,78 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void bttAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttAceptarActionPerformed
-        magn = txtMagnitud.getText();
-        direc = txtDireccion.getText();
-        if(magn.length() == 0 || direc.length() == 0){
-            JOptionPane.showMessageDialog(null, "ERROR.\nRELLENA LOS CAMPOS.", ":::MENSAJE DE ERROR:::", JOptionPane.ERROR_MESSAGE);
+        String rell = "Error: \n";
+        String errInput = "Error: \n";
+        boolean rell1 = false;
+        boolean errInput1 = false;
+        if(txtMagnitudInput.getText().length() == 0){
+            rell += "\t- Rellena campo Magnitud.\n";
+            rell1 = true;
         }
+        if(txtDireccionInput.getText().length() == 0){
+            rell += "\t- Rellena campo Direccion.\n";
+            rell1 = true;
+        }
+        if(rell1){
+            JOptionPane.showMessageDialog(null, rell, ":::AVISO:::", JOptionPane.WARNING_MESSAGE);
+        }
+        // SEGUIR CON LOS PATRONES
         else{
-            d = Double.parseDouble(direc);
-            if(d < 0 || d > 360){
-                JOptionPane.showMessageDialog(null, "ERROR.\nANGULO INCORRECTO.", ":::MENSAJE DE ERROR:::", JOptionPane.ERROR_MESSAGE);
+            double direccionP = 0;
+            double magnitudP = 0;
+            if(!txtMagnitudInput.getText().matches("^[0-9]([0-9]+)?([.][0-9]{1,2})?")){
+                errInput += "\t- Verifica magnitud.\n";
+                errInput1 = true;
             }
             else{
-                double m = Double.parseDouble(magn);
-                String datos[] = {magn, direc};
+                magnitudP = Double.parseDouble(txtMagnitudInput.getText());
+            }
+            if(!txtDireccionInput.getText().matches("[0-9]([0-9]+)?([.][0-9]{1,2})?")){
+                errInput += "\t- Verifica direccion.\n";
+                errInput1 = true;
+            }
+            else{
+                direccionP = Double.parseDouble(txtDireccionInput.getText());
+            }
+            if(direccionP < 0){
+                errInput += "\t   - Direccion minima [0]";
+                errInput1 = true;
+            }
+            System.out.println("magnitudP  " + magnitudP);
+            System.out.println("direccionP  " + direccionP);
+            if(direccionP > 360){
+                errInput += "\t   - Direccion maxima [360]";
+                errInput1 = true;
+            }
+            if(errInput1){
+                JOptionPane.showMessageDialog(null, errInput, ":::AVISO:::", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                // VALIDACION CORRECTA
+                String datos[] = {magnitudP + "", direccionP + ""};
                 md.addRow(datos);
                 borrarCampos();
-                listaVectores.insertarVector(m, d);
-                listaVectores.calculoFX(m, d);
-                listaVectores.calculoFY(m, d);
-                txtVectoresIng.setText(listaVectores.getTamanio() + "");
+                listaVectores.insertarVector(magnitudP, direccionP);
+                listaVectores.calculoFX(magnitudP, direccionP);
+                listaVectores.calculoFY(magnitudP, direccionP);
+                txtVectoresIng.setText(listaVectores.getTamanio()+ "");
                 txtSigmaFx.setText(tresDig.format(listaVectores.getSumaFx()) + "");
                 txtSigmaFy.setText(tresDig.format(listaVectores.getSumaFy()) + "");
                 txtResultanteTotal.setText(tresDig.format(listaVectores.calcularResultante()) + "");
-                txtDireccionTotal.setText(tresDig.format(listaVectores.getDireccion()) + "");
+                txtDireccionTotal.setText(tresDig.format(listaVectores.getDireccionTotal()) + "");
+                borrarCampos();
             }
-        }
+        }    
     }//GEN-LAST:event_bttAceptarActionPerformed
     private void bttSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttSalirActionPerformed
         salir();
     }//GEN-LAST:event_bttSalirActionPerformed
+    private void txtMagnitudInputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMagnitudInputKeyPressed
+       
+    }//GEN-LAST:event_txtMagnitudInputKeyPressed
+    private void txtDireccionInputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionInputKeyPressed
+      
+    }//GEN-LAST:event_txtDireccionInputKeyPressed
     /**
      * @param args the command line arguments
      */
@@ -319,9 +374,9 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTblDatos;
-    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtDireccionInput;
     private javax.swing.JTextField txtDireccionTotal;
-    private javax.swing.JTextField txtMagnitud;
+    private javax.swing.JTextField txtMagnitudInput;
     private javax.swing.JTextField txtResultanteTotal;
     private javax.swing.JTextField txtSigmaFx;
     private javax.swing.JTextField txtSigmaFy;

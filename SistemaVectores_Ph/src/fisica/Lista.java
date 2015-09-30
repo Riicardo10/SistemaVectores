@@ -1,12 +1,36 @@
 package fisica;
 public class Lista {
-    Nodo primero;
-    private Nodo ultimo;
+    private Nodo primero, ultimo;
     private int tamano;
-    double sigmaFX, sigmaFY;
-    double direccion;
+    double sigmaFX, sigmaFY, direccion;
     double resultanteFx, resultanteFy, resultante;
     double componenteFx, componenteFy;
+    String magnitud, direc;
+    double m, d;
+    public double getM() {
+        return m;
+    }
+    public void setM(double m) {
+        this.m = m;
+    }
+    public double getD() {
+        return d;
+    }
+    public void setD(double d) {
+        this.d = d;
+    }
+    public String getDirecString() {
+        return direc;
+    }
+    public void setDirecString(String direc) {
+        this.direc = direc;
+    }
+    public String getMagniString() {
+        return magnitud;
+    }
+    public void setMagniString(String magnitud) {
+        this.magnitud = magnitud;
+    }
     public Lista() {
         this.primero = null;
         this.ultimo = null;
@@ -58,7 +82,7 @@ public class Lista {
         resultante = Math.sqrt(resultanteFx + resultanteFy);
         return resultante;
     }
-    public double getDireccion(){
+    public double getDireccionTotal(){
         direccion = Math.toDegrees(Math.atan(getSumaFy() / getSumaFx()));
         return direccion;
     }
